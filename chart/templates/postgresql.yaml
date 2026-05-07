@@ -1,0 +1,122 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgresql
+spec:
+  selector:
+    name: postgresql
+  ports:
+    - port: 5432
+      targetPort: 5432
+      protocol: TCP
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgresql
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: postgresql
+type: Opaque
+stringData:
+  database-user: {{ .Values.databaseUser | quote }}
+  database-password: {{ .Values.databasePassword | quote }}
+  database-name: lsdb
+---
+kind: DeploymentConfig
+apiVersion: apps.openshift.io/v1
+metadata:
+  annotations:
+    template.alpha.openshift.io/wait-for-ready: "true"
+  name: postgresql
+  labels:
+    template: postgresql-persistent-template
+spec:
+  strategy:
+    type: Recreate
+    recreateParams:
+      timeoutSeconds: 600
+    resources: {}
+    activeDeadlineSeconds: 21600
+  triggers:
+    - type: ConfigChange
+  replicas: 1
+  revisionHistoryLimit: 10
+  test: false
+  selector:
+    name: postgresql
+  template:
+    metadata:
+      labels:
+        name: postgresql
+    spec:
+      volumes:
+        - name: postgresql-data
+          persistentVolumeClaim:
+            claimName: postgresql
+      containers:
+        - name: postgresql
+          image: registry.redhat.io/rhel8/postgresql-15@sha256:8fdc09d6745ef0babba82e3f2e30596266ee8575ae5e1be73df88ab1a18df0f5
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              memory: 512Mi
+          readinessProbe:
+            exec:
+              command:
+                - /usr/libexec/check-container
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          livenessProbe:
+            exec:
+              command:
+                - /usr/libexec/check-container
+                - --live
+            initialDelaySeconds: 120
+            timeoutSeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          env:
+            - name: POSTGRESQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql
+                  key: database-user
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql
+                  key: database-password
+            - name: POSTGRESQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql
+                  key: database-name
+          securityContext:
+            capabilities: {}
+            privileged: false
+          ports:
+            - containerPort: 5432
+              protocol: TCP
+          volumeMounts:
+            - name: postgresql-data
+              mountPath: /var/lib/pgsql/data
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
