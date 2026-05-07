@@ -31,32 +31,25 @@ stringData:
   database-password: {{ .Values.databasePassword | quote }}
   database-name: lsdb
 ---
-kind: DeploymentConfig
-apiVersion: apps.openshift.io/v1
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  annotations:
-    template.alpha.openshift.io/wait-for-ready: "true"
   name: postgresql
   labels:
-    template: postgresql-persistent-template
+    app: postgresql
 spec:
-  strategy:
-    type: Recreate
-    recreateParams:
-      timeoutSeconds: 600
-    resources: {}
-    activeDeadlineSeconds: 21600
-  triggers:
-    - type: ConfigChange
   replicas: 1
   revisionHistoryLimit: 10
-  test: false
+  strategy:
+    type: Recreate
   selector:
-    name: postgresql
+    matchLabels:
+      name: postgresql
   template:
     metadata:
       labels:
         name: postgresql
+        app: postgresql
     spec:
       volumes:
         - name: postgresql-data
