@@ -1,5 +1,5 @@
 # OpenShift project / namespace used by service DNS names
-projectName: rag-demo
+projectName: agnews-rag-demo
 
 # PostgreSQL
 databaseUser: admin
