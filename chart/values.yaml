@@ -1,0 +1,7 @@
+# OpenShift project / namespace used by service DNS names
+projectName: rag-demo
+
+# PostgreSQL
+databaseUser: admin
+databasePassword: admin123
+databaseName: lsdb
