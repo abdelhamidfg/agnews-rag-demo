@@ -1,5 +1,8 @@
 # OpenShift project / namespace used by service DNS names
 projectName: agnews-rag-demo
+# Milvus
+milvusPassword: admin123
+milvusToken: TXlTdHIwbmdQQHNzdzByZA==
 
 # PostgreSQL
 databaseUser: admin
