@@ -1,7 +1,0 @@
-apiVersion: project.openshift.io/v1
-kind: Project
-metadata:
-  name: {{ .Values.projectName }}
-  labels:
-    app.kubernetes.io/name: agnews-rag-demo
-    app.kubernetes.io/managed-by: Helm
