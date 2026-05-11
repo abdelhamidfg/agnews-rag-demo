@@ -1,5 +1,5 @@
 # OpenShift project / namespace used by service DNS names
-projectName: agnews-rag-demo
+namespace: agnews-rag-demo
 # Milvus
 milvusPassword: admin123
 milvusToken: TXlTdHIwbmdQQHNzdzByZA==
@@ -11,36 +11,4 @@ databaseName: lsdb
 
  
 
-workbench:
-  name: agnews-rag-workbench
-  displayName: "AG News RAG Workbench"
 
-  image: quay.io/opendatahub/workbench-images:jupyter-datascience-ubi9-python-3.11-2025b-20251013
-
-  pvc:
-    name: agnews-rag-workbench-pvc
-    size: 20Gi
-    storageClassName: ""
-
-  resources:
-    requests:
-      cpu: "500m"
-      memory: "2Gi"
-    limits:
-      cpu: "2"
-      memory: "8Gi"
-
-notebooks:
-  repoUrl: "https://github.com/abdelhamidfg/agnews-rag-demo.git"
-  branch: "main"
-
-  # Path inside the Git repo where notebooks exist
-  sourcePath: "notebooks"
-
-  # Path inside JupyterLab workspace
-  destinationPath: "/opt/app-root/src/notebooks"
-
-git:
-  privateRepo: false
-  username: ""
-  token: ""
