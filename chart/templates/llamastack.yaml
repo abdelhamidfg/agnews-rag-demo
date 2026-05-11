@@ -318,11 +318,11 @@ spec:
         - name: VLLM_MAX_TOKENS
           value: '4096'
         - name: VLLM_URL
-          value: 'https://llama-32-3b-instruct-predictor.{{ .Values.projectName }}.svc.cluster.local:8080/v1'
+          value: 'https://llama-32-3b-instruct-predictor.{{ .Values.namespace }}.svc.cluster.local:8080/v1'
         - name: VLLM_TLS_VERIFY
           value: 'false'
         - name: VLLM_RERANKER_URL
-          value: 'https://qwen3-reranker-predictor.{{ .Values.projectName }}.svc.cluster.local:8080/v1'  
+          value: 'https://qwen3-reranker-predictor.{{ .Values.namespace }}.svc.cluster.local:8080/v1'  
        
         - name: MILVUS_ENDPOINT
           valueFrom:
