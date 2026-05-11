@@ -2,7 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: {{ .Values.workbench.pvc.name }}
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.projectName }}
   labels:
     app.kubernetes.io/name: {{ .Values.workbench.name }}
     app.kubernetes.io/managed-by: Helm
