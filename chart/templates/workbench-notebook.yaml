@@ -2,7 +2,7 @@ apiVersion: kubeflow.org/v1
 kind: Notebook
 metadata:
   name: {{ .Values.workbench.name }}
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.projectName }}
   labels:
     app: {{ .Values.workbench.name }}
     app.kubernetes.io/name: {{ .Values.workbench.name }}
