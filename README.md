@@ -1,4 +1,4 @@
-# AG News RAG Demo with Open GenAI Stack / LlamaStack
+#  RAG Demo with Open GenAI Stack / LlamaStack
 
 This repository demonstrates how to build a metadata-aware Retrieval-Augmented Generation (RAG) application using **Open GenAI Stack (OGX) / LlamaStack**, **Milvus**, **vLLM**, and the **AG News** dataset.
 
